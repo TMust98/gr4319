@@ -1,0 +1,19 @@
+{% block title %}
+        {% if title %}
+            <title>{{ title }}</title>
+        {% else %}
+             <title>Страница</title>
+        {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% with message = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    {% block app_content %}{% endblock %}
+{% endblock %}

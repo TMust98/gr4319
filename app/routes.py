@@ -1,6 +1,6 @@
-from app import app
-from flask import render_template, flash, redirect, url_for, send_from_directory, request
-from app.forms import LoginForm
+from app import app, db
+from flask import render_template, flash, redirect, url_for, send_from_directory, request, abort
+from app.forms import LoginForm, RegisterForm
 import os
 from app.models import User
 from flask_login import current_user, login_user, logout_user, login_required
@@ -13,6 +13,7 @@ def favicon():
 @app.route('/')
 @app.route('/index', methods=['GET','POST'])
 def index():
+    redirect('500.html')
     return render_template('index.html', title='тесты')
 
 
@@ -37,9 +38,29 @@ def login():
     return render_template('login.html', title = 'Вход', form = form)
 
 
+@app.route('/register', methods=['GET','POST'])
+def register():
+    if current_user.is_authenticated:
+        flash('Вы уже зарегистрированный пользователь! Для регистрации нового аккаунта выйдите из системы.', 'warning')
+        return redirect(url_for('index'))
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash(f'Успешная регистрация! Теперь можно войти. Ваш ID {user.id}','success')
+        return redirect(url_for('login'))
+
+    return render_template('register.html', form=form, title='Регистрация')
+
+
+
 @app.route('/lk', methods=['GET','POST'])
 @login_required
 def lk():
+    if current_user.is_anonymous:
+        abort(403)
     return render_template('lk.html', title='Личный кабинет')
 
 
@@ -48,3 +69,4 @@ def logout():
     logout_user()
     flash('Вы вышли из системы', 'warning')
     return redirect('index')
+

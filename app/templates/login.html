@@ -14,6 +14,9 @@
         </p>
         <p>{{ form.remember_me.label }}{{ form.remember_me() }}</p>
         <p>{{ form.submit(class_="btn btn-secondary", style="background-color: #808080; color:white") }}</p>
+        <br>
+        <br>
+        <p>Новый пользователь? <a href="{{ url_for('register') }}">Нажмите для регистрации</a></p>
     </form>
 
 

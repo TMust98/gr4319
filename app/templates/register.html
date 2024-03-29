@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h1 align="center">Регистрация</h1>
+    <div align="center">
+        <form method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.username.label }}
+                {{ form.username(class_="form-control", style="width:20%") }}
+                {% for error in form.username.errors %}
+                    <span style="color:red">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.password.label }}
+                {{ form.password(class_="form-control", style="width:20%") }}
+                {% for error in form.password.errors %}
+                    <span style="color:red">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.password2.label }}
+                {{ form.password2(class_="form-control", style="width:20%") }}
+                {% for error in form.password2.errors %}
+                    <span style="color:red">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit(class_="btn btn-secondary", style="background-color: #808080; color:white") }}</p>
+        </form>
+    </div>
+{% endblock %}
